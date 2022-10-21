@@ -356,11 +356,15 @@ $result = $object instanceof Model ? $object->name : 'A default value';
 
 Always use curly brackets.
 
+Good:
+
 ```php
 if ($condition) {
     ...
 }
 ```
+
+Bad:
 
 ```php
 if ($condition) ...
@@ -501,43 +505,12 @@ Bad:
 // Start calculating loans
 ```
 
-## Test classes
-
-If you need a specific class for your test cases, you should keep them within the same test file when possible. When you
-want to reuse test classes throughout tests, it's fine to make a dedicated class instead. Here's an example of internal
-classes:
-
-<?php
-
-namespace Spatie\EventSourcing\Tests\AggregateRoots;
-
-// …
-
-class AggregateEntityTest extends TestCase
-{
-    /** @test */
-    public function test_entities()
-    {
-        // …
-    }
-}
-
-class ItemAdded extends ShouldBeStored
-{
-    public function __construct(
-        public string $name
-    ) {
-    }
-}
-
-class CartCleared extends ShouldBeStored
-{
-}
-
 ## Whitespace
 
-Statements should be allowed to breathe. In general always add blank lines between statements, unless they're a sequence of single-line equivalent operations. This isn't something enforceable, it's a matter of what looks best in its context.
+Statements should be allowed to breathe. In general always add blank lines between statements, unless they're a sequence
+of single-line equivalent operations. This isn't something enforceable, it's a matter of what looks best in its context.
 
+```php
 public function getPage($url)
 {
     $page = $this->pages()->where('slug', $url)->first();
@@ -552,7 +525,9 @@ public function getPage($url)
 
     return $page;
 }
+```
 
+```php
 // Everything's cramped together.
 public function getPage($url)
 {
@@ -565,7 +540,9 @@ public function getPage($url)
     }
     return $page;
 }
+```
 
+```php
 // A sequence of single-line equivalent operations.
 public function up()
 {
@@ -578,36 +555,50 @@ public function up()
         $table->timestamps();
     });
 }
+```
 
 Don't add any extra empty lines between {} brackets.
 
+```php
 if ($foo) {
     $this->foo = $foo;
 }
+```
 
+```php
 if ($foo) {
 
     $this->foo = $foo;
 }
+```
 
 ## Configuration
 
 Configuration files must use kebab-case.
 
+```
 config/
   pdf-generator.php
+```
 
 Configuration keys must use snake_case.
 
+```php
 // config/pdf-generator.php
 return [
     'chrome_path' => env('CHROME_PATH'),
 ];
+```
 
-Avoid using the env helper outside of configuration files. Create a configuration value from the env variable like above.
+Avoid using the env helper outside of configuration files. Create a configuration value from the env variable like
+above.
 
-When adding config values for a specific service, add them to the services config file. Do not create a new config file.
+When adding config values for a specific external service, add them to the services config file. Do not create a new
+config file.
 
+Good:
+
+```php
 // Adding credentials to `config/services.php`
 return [
     'ses' => [
@@ -629,7 +620,11 @@ return [
         'token' => env('WEYLAND_YUTANI_TOKEN')
     ],   
 ];
+```
 
+Bad:
+
+```php
 // Creating a new config file: `weyland-yutani.php`
 
 return [
@@ -637,17 +632,28 @@ return [
         'token' => env('WEYLAND_YUTANI_TOKEN')
     ],  
 ]
+```
 
 ## Artisan commands
 
 The names given to artisan commands should all be kebab-cased.
 
+Good:
+
+```bash
 php artisan delete-old-records
+```
 
+Bad:
+
+```bash
 php artisan deleteOldRecords
+```
 
-A command should always give some feedback on what the result is. Minimally you should let the handle method spit out a comment at the end indicating that all went well.
+A command should always give some feedback on what the result is. Minimally you should let the handle method spit out a
+comment at the end indicating that all went well.
 
+```php
 // in a Command
 public function handle()
 {
@@ -655,11 +661,15 @@ public function handle()
 
     $this->comment('All ok!');
 }
+```
 
-When the main function of a result is processing items, consider adding output inside of the loop, so progress can be tracked. Put the output before the actual process. If something goes wrong, this makes it easy to know which item caused the error.
+When the main function of a result is processing items, consider adding output inside of the loop, so progress can be
+tracked. Put the output before the actual process. If something goes wrong, this makes it easy to know which item caused
+the error.
 
 At the end of the command, provide a summary on how much processing was done.
 
+```php
 // in a Command
 public function handle()
 {
@@ -674,31 +684,56 @@ public function handle()
 
     $this->comment("Processed {$item->count()} items.");
 }
+```
 
 ## Routing
 
+Always give routes a sensible name!
+
 Public-facing urls must use kebab-case.
 
+```
 https://spatie.be/open-source
 https://spatie.be/jobs/front-end-developer
+```
 
 Prefer to use the route tuple notation when possible.
 
+Good:
+
+```php
 Route::get('open-source', [OpenSourceController::class, 'index']);
+```
 
+Bad:
+
+```php
 Route::get('open-source', 'OpenSourceController@index');
+```
 
-<a href="{{ action([\App\Http\Controllers\OpenSourceController::class, 'index']) }}">
+
+```html
+<a href="{{ route('r) }}">
     Open Source
 </a>
+```
 
 Route names must use camelCase.
 
+Good:
+
+```php
 Route::get('open-source', [OpenSourceController::class, 'index'])->name('openSource');
+```
 
+
+Bad:
+```php
 Route::get('open-source', [OpenSourceController::class, 'index'])->name('open-source');
+```
 
-All routes have an HTTP verb, that's why we like to put the verb first when defining a route. It makes a group of routes very readable. Any other route options should come after it.
+All routes have an HTTP verb, that's why we like to put the verb first when defining a route. It makes a group of routes
+very readable. Any other route options should come after it.
 
 // all HTTP verbs come first
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -726,19 +761,21 @@ Controllers that control a resource must use the plural resource name.
 
 class PostsController
 {
-    // ...
+// ...
 }
 
-Try to keep controllers simple and stick to the default CRUD keywords (index, create, store, show, edit, update, destroy). Extract a new controller if you need other actions.
+Try to keep controllers simple and stick to the default CRUD keywords (index, create, store, show, edit, update,
+destroy). Extract a new controller if you need other actions.
 
-In the following example, we could have PostsController@favorite, and PostsController@unfavorite, or we could extract it to a separate FavoritePostsController.
+In the following example, we could have PostsController@favorite, and PostsController@unfavorite, or we could extract it
+to a separate FavoritePostsController.
 
 class PostsController
 {
-    public function create()
-    {
-        // ...
-    }
+public function create()
+{
+// ...
+}
 
     // ...
 
@@ -755,15 +792,16 @@ class PostsController
 
         return response(null, 200);
     }
+
 }
 
 Here we fall back to default CRUD words, store and destroy.
 
 class FavoritePostsController
 {
-    public function store(Post $post)
-    {
-        request()->user()->favorites()->attach($post);
+public function store(Post $post)
+{
+request()->user()->favorites()->attach($post);
 
         return response(null, 200);
     }
@@ -774,46 +812,49 @@ class FavoritePostsController
 
         return response(null, 200);
     }
+
 }
 
 This is a loose guideline that doesn't need to be enforced.
+
 ## Views
 
 View files must use camelCase.
 
 resources/
-  views/
-    openSource.blade.php
+views/
+openSource.blade.php
 
 class OpenSourceController
 {
-    public function index() {
-        return view('openSource');
-    }
+public function index() {
+return view('openSource');
+}
 }
 
 ## Validation
 
-When using multiple rules for one field in a form request, avoid using |, always use array notation. Using an array notation will make it easier to apply custom rule classes to a field.
+When using multiple rules for one field in a form request, avoid using |, always use array notation. Using an array
+notation will make it easier to apply custom rule classes to a field.
 
 public function rules()
 {
-    return [
-        'email' => ['required', 'email'],
-    ];
+return [
+'email' => ['required', 'email'],
+];
 }
 
 public function rules()
 {
-    return [
-        'email' => 'required|email',
-    ];
+return [
+'email' => 'required|email',
+];
 }
 
 All custom validation rules must use snake_case:
 
 Validator::extend('organisation_type', function ($attribute, $value) {
-    return OrganisationType::isValid($value);
+return OrganisationType::isValid($value);
 });
 
 ## Blade Templates
@@ -827,7 +868,7 @@ Indent using four spaces.
 Don't add spaces after control structures.
 
 @if($condition)
-    Something
+Something
 @endif
 
 ## Authorization
@@ -835,19 +876,22 @@ Don't add spaces after control structures.
 Policies must use camelCase.
 
 Gate::define('editPost', function ($user, $post) {
-    return $user->id == $post->user_id;
+return $user->id == $post->user_id;
 });
 
 @can('editPost', $post)
-    <a href="{{ route('posts.edit', $post) }}">
-        Edit
-    </a>
+<a href="{{ route('posts.edit', $post) }}">
+Edit
+</a>
 @endcan
 
-Try to name abilities using default CRUD words. One exception: replace show with view. A server shows a resource, a user views it.
+Try to name abilities using default CRUD words. One exception: replace show with view. A server shows a resource, a user
+views it.
+
 ## Translations
 
-Translations must be rendered with the __ function. We prefer using this over @lang in Blade views because __ can be used in both Blade views and regular PHP code. Here's an example:
+Translations must be rendered with the __ function. We prefer using this over @lang in Blade views because __ can be
+used in both Blade views and regular PHP code. Here's an example:
 
 <h2>{{ __('newsletter.form.title') }}</h2>
 
@@ -855,44 +899,58 @@ Translations must be rendered with the __ function. We prefer using this over @l
 
 ## Naming Classes
 
-Naming things is often seen as one of the harder things in programming. That's why we've established some high level guidelines for naming classes.
+Naming things is often seen as one of the harder things in programming. That's why we've established some high level
+guidelines for naming classes.
+
 ## Controllers
 
-Generally controllers are named by the plural form of their corresponding resource and a Controller suffix. This is to avoid naming collisions with models that are often equally named.
+Generally controllers are named by the plural form of their corresponding resource and a Controller suffix. This is to
+avoid naming collisions with models that are often equally named.
 
 e.g. UsersController or EventDaysController
 
-When writing non-resourceful controllers you might come across invokable controllers that perform a single action. These can be named by the action they perform again suffixed by Controller.
+When writing non-resourceful controllers you might come across invokable controllers that perform a single action. These
+can be named by the action they perform again suffixed by Controller.
 
 e.g. PerformCleanupController
+
 ## Resources (and transformers)
 
-Both Eloquent resources and Fractal transformers are plural resources suffixed with Resource or Transformer accordingly. This is to avoid naming collisions with models.
+Both Eloquent resources and Fractal transformers are plural resources suffixed with Resource or Transformer accordingly.
+This is to avoid naming collisions with models.
+
 ## Jobs
 
 A job's name should describe its action.
 
 E.g. CreateUser or PerformDatabaseCleanup
+
 ## Events
 
 Events will often be fired before or after the actual event. This should be very clear by the tense used in their name.
 
 E.g. ApprovingLoan before the action is completed and LoanApproved after the action is completed.
+
 ## Listeners
 
-Listeners will perform an action based on an incoming event. Their name should reflect that action with a Listener suffix. This might seem strange at first but will avoid naming collisions with jobs.
+Listeners will perform an action based on an incoming event. Their name should reflect that action with a Listener
+suffix. This might seem strange at first but will avoid naming collisions with jobs.
 
 E.g. SendInvitationMailListener
+
 ## Commands
 
 To avoid naming collisions we'll suffix commands with Command, so they are easiliy distinguisable from jobs.
 
 e.g. PublishScheduledPostsCommand
+
 ## Mailables
 
-Again to avoid naming collisions we'll suffix mailables with Mail, as they're often used to convey an event, action or question.
+Again to avoid naming collisions we'll suffix mailables with Mail, as they're often used to convey an event, action or
+question.
 
 e.g. AccountActivatedMail or NewEventMail
+
 ## Enums
 
 Enums don't need to be prefixed as in most cases, it is clear by reading the name that it is an enum.
