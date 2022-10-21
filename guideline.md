@@ -181,251 +181,325 @@ Bad:
 /** @var \SomeWeirdVendor\Collection|\Illuminate\Support\Collection */
 ```
 
-If a function requires a docblock for a single parameter or return type, add all other docblocks as well.
+If a function requires a docblock for a single parameter or return type, add only that type to the docblock.
 
-/**
+Good:
 
-* @param string $name
-* @return \Illuminate\Support\Collection<SomeObject>
-  */
-  function someFunction(string $name): Collection {
-  //
-  }
+```php
+/** 
+ * @return \Illuminate\Support\Collection<SomeObject> 
+ */
+function someFunction(string $name): Collection {
+    // ...
+}
+```
 
-/**
+Bad:
 
-* @return \Illuminate\Support\Collection<SomeObject>
-  */
-  function someFunction(string $name): Collection {
-  //
-  }
+```php
+/** 
+ * @param string $name
+ * @return \Illuminate\Support\Collection<SomeObject> 
+ */
+function someFunction(string $name): Collection {
+    // ...
+}
+```
 
 ## Docblocks for iterables
 
 When your function gets passed an iterable, you should add a docblock to specify the type of key and value. This will
 greatly help static analysis tools understand the code, and IDEs to provide autocompletion.
 
+```php
 /**
-
-* @param $myArray array<int, MyObject>
-  */
-  function someFunction(array $myArray) {
+ * @param $myArray array<int, MyObject>
+ */
+function someFunction(array $myArray) {
 
 }
-
-In this example, typedArgument needs a docblock too:
-
-/**
-
-* @param $myArray array<int, MyObject>
-* @param int $typedArgument
-  */
-  function someFunction(array $myArray, int $typedArgument) {
-
-}
+```
 
 The keys and values of iterables that get returned should always be typed.
 
+```php
 use \Illuminate\Support\Collection
 
 /**
-
-* @return \Illuminate\Support\Collection<int,SomeObject>
-  */
-  function someFunction(): Collection {
-  //
-  }
+ * @return \Illuminate\Support\Collection<int,SomeObject>
+ */
+function someFunction(): Collection {
+    //
+}
+```
 
 If your array or collection has a few fixed keys, you can typehint them too using {} notation.
 
+```php
 use \Illuminate\Support\Collection
 
 /**
-
-* @return array{first: SomeClass, second: SomeClass}
-  */
-  function someFunction(): array {
-  //
-  }
+ * @return array{first: SomeClass, second: SomeClass}
+ */
+function someFunction(): array {
+    //
+}
+```
 
 If there is only one docblock needed, you may use the short version.
 
+```php
 use \Illuminate\Support\Collection
 
 /** @return \Illuminate\Support\Collection<int,SomeObject> */
 function someFunction(): Collection {
-//
+    //
 }
+```
 
 ## Constructor property promotion
 
-Use constructor property promotion if all properties can be promoted. To make it readable, put each one on a line of its
-own. Use a comma after the last one.
+Use constructor property promotion where possible. To make it readable, put each one on a line of its
+own. Don't use a comma after the last one.
 
+Good:
+
+```php
 class MyClass {
-public function __construct(
-protected string $firstArgument,
-protected string $secondArgument,
-) {}
+    public function __construct(
+        protected string $firstArgument,
+        protected string $secondArgument
+    ) {}
 }
+```
 
+Bad:
+
+```php
 class MyClass {
-protected string $secondArgument
+    protected string $secondArgument
 
-    public function __construct(protected string $firstArgument, string $secondArgument)
+    public function __construct(protected string $firstArgument, string $secondArgument,)
     {
         $this->secondArgument = $secondArgument;
     }
-
 }
+```
 
 ## Traits
 
 Each applied trait should go on its own line, and the use keyword should be used for each of them. This will result in
 clean diffs when traits are added or removed.
 
-class MyClass
-{
-use TraitA;
-use TraitB;
-}
+Good:
 
+```php
 class MyClass
 {
-use TraitA, TraitB;
+    use TraitA;
+    use TraitB;
 }
+```
+
+Bad:
+
+```php
+class MyClass
+{
+    use TraitA, TraitB;
+}
+```
 
 ## Strings
 
 When possible prefer string interpolation above sprintf and the . operator.
 
-$greeting = "Hi, I am {$name}.";
+Good:
 
+```php
+$greeting = "Hi, I am {$name}.";
+```
+
+Bad:
+
+```php
 $greeting = 'Hi, I am ' . $name . '.';
+```
 
 ## Ternary operators
 
 Every portion of a ternary expression should be on its own line unless it's a really short expression.
 
-$name = $isFoo ? 'foo' : 'bar';
+Good:
 
+```php
+$name = $isFoo ? 'foo' : 'bar';
+```
+
+Also good:
+
+```php
 $result = $object instanceof Model ?
 $object->name :
 'A default value';
+```
+
+Bad:
+
+```php
+$result = $object instanceof Model ? $object->name : 'A default value';
+```
 
 ## If statements
 
-## Bracket position
+### Bracket position
 
 Always use curly brackets.
 
+```php
 if ($condition) {
-...
+    ...
 }
+```
 
+```php
 if ($condition) ...
+```
 
-## Happy path
+### Happy path
 
 Generally a function should have its unhappy path first and its happy path last. In most cases this will cause the happy
 path being in an unindented part of the function which makes it more readable.
 
+Good:
+
+```php
 if (! $goodCondition) {
-throw new Exception;
+  throw new Exception;
 }
+```
 
+Bad:
+
+```php
 if ($goodCondition) {
-// do work
+ // do work
 }
 
 throw new Exception;
+```
 
 ## Avoid else
 
 In general, else should be avoided because it makes code less readable. In most cases it can be refactored using early
 returns. This will also cause the happy path to go last, which is desirable.
 
-if (! $conditionA) {
-// condition A failed
+Good:
 
-return;
+```php
+if (! $conditionA) {
+   // condition A failed
+   return;
 }
 
 if (! $conditionB) {
-// condition A passed, B failed
-
-return;
+   // condition A passed, B failed
+   return;
 }
 
 // condition A and B passed
+```
 
+Bad:
+
+```php
 if ($conditionA) {
-if ($conditionB) {
-// condition A and B passed
+   if ($conditionB) {
+      // condition A and B passed
+   } else {
+     // condition A passed, B failed
+   }
+} else {
+   // condition A failed
 }
-else {
-// condition A passed, B failed
-}
-}
-else {
-// condition A failed
-}
+```
 
 Another option to refactor an else away is using a ternary
 
+```php
 if ($condition) {
-$this->doSomething();
+    $this->doSomething();
+} else {
+    $this->doSomethingElse();
 }
-else {
-$this->doSomethingElse();
-}
+```
 
+Can be refactored to:
+
+```php
 $condition
-
     ? $this->doSomething()
     : $this->doSomethingElse();
+```
 
 ## Compound ifs
 
 In general, separate if statements should be preferred over a compound condition. This makes debugging code easier.
 
+```php
 if (! $conditionA) {
-return;
+   return;
 }
 
 if (! $conditionB) {
-return;
+   return;
 }
 
 if (! $conditionC) {
-return;
+   return;
 }
 
 // do stuff
+```
 
+Bad:
+
+```php
 if ($conditionA && $conditionB && $conditionC) {
 // do stuff
 }
+```
 
 ## Comments
 
 Comments should be avoided as much as possible by writing expressive code. If you do need to use a comment, format it
 like this:
 
+```php
 // There should be a space before a single line comment.
 
 /*
-
-* If you need to explain a lot you can use a comment block. Notice the
-* single * on the first line. Comment blocks don't need to be three
-* lines long or three characters shorter than the previous line.
-  */
+ * If you need to explain a lot you can use a comment block. Notice the
+ * single * on the first line. Comment blocks don't need to be three
+ * lines long or three characters shorter than the previous line.
+ * But it can be, to make it look awesome. Might take time tho
+ */
+```
 
 A possible strategy to refactor away a comment is to create a function with name that describes the comment
 
-$this->calculateLoans();
+Good:
 
+```php
+
+$this->calculateLoans();
+```
+
+Bad:
+
+```php
 // Start calculating loans
+```
 
 ## Test classes
 
