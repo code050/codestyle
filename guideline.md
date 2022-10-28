@@ -71,7 +71,20 @@ class Foo
     public $bar;
 }
 ```
+## Arrays
+Use the shorthand array syntax instead of the long array syntax.
 
+Good:
+
+```php
+$foo = ['bar'];
+```
+
+Bad:
+
+```php
+$foo = array('bar');
+```
 ## Enums
 
 Values in enums should use PascalCase.

@@ -1,0 +1,21 @@
+{
+  "name": "code050/codestyle",
+  "description": "The official Code050 codestyle package, containing a guideline",
+  "type": "library",
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "Code050\\Codestyle\\": "src/"
+    }
+  },
+  "authors": [
+    {
+      "name": "Melchior Aorus",
+      "email": "melchiorkokernoot@gmail.com"
+    }
+  ],
+  "minimum-stability": "stable",
+  "require": {
+    "friendsofphp/php-cs-fixer": "^3.12"
+  },
+}
