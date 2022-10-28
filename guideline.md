@@ -711,7 +711,6 @@ Bad:
 Route::get('open-source', 'OpenSourceController@index');
 ```
 
-
 ```html
 <a href="{{ route('r) }}">
     Open Source
@@ -726,8 +725,8 @@ Good:
 Route::get('open-source', [OpenSourceController::class, 'index'])->name('openSource');
 ```
 
-
 Bad:
+
 ```php
 Route::get('open-source', [OpenSourceController::class, 'index'])->name('open-source');
 ```
@@ -757,25 +756,29 @@ Route::get('/open-source', [OpenSourceController::class, 'index']);
 
 ## Controllers
 
-Controllers that control a resource must use the plural resource name.
+Controllers that control a resource must use the singular resource name.
 
-class PostsController
+```php
+class PostController
 {
 // ...
 }
+```
 
 Try to keep controllers simple and stick to the default CRUD keywords (index, create, store, show, edit, update,
-destroy). Extract a new controller if you need other actions.
+destroy). Extract a new controller if you need other actions. A very good talk on this concept to help you understand
+this better is ["Cruddy by Design" - Adam Wathan](https://www.youtube.com/watch?v=MF0jFKvS4SI)
 
-In the following example, we could have PostsController@favorite, and PostsController@unfavorite, or we could extract it
-to a separate FavoritePostsController.
+In the following example, we could have PostController@favorite, and PostController@unfavorite, or we could extract it
+to a separate FavoritePostController.
 
-class PostsController
+```php
+class PostController
 {
-public function create()
-{
-// ...
-}
+    public function create()
+    {
+        // ...
+    }
 
     // ...
 
@@ -792,16 +795,17 @@ public function create()
 
         return response(null, 200);
     }
-
 }
+```
 
 Here we fall back to default CRUD words, store and destroy.
 
+```php
 class FavoritePostsController
 {
-public function store(Post $post)
-{
-request()->user()->favorites()->attach($post);
+    public function store(Post $post)
+    {
+        request()->user()->favorites()->attach($post);
 
         return response(null, 200);
     }
@@ -812,147 +816,234 @@ request()->user()->favorites()->attach($post);
 
         return response(null, 200);
     }
-
 }
+```
 
-This is a loose guideline that doesn't need to be enforced.
+This is a loose guideline that doesn't need to be enforced. It can improve readability, so whenever possible, try to
+stick to it.
 
 ## Views
 
-View files must use camelCase.
+View files must use kebab-case.
 
-resources/
-views/
-openSource.blade.php
+Views are for data presentation which means we use them to display data. We don't use them to process data. That's what
+controllers are for. So, we should try to avoid having logic in our views.
+Whenever you catch yourself writing logic in views, ask yourself: "Can I move this logic to a controller, action or
+service?".
 
+```
+resources/views/open-source.blade.php
+```
+
+```php
 class OpenSourceController
 {
-public function index() {
-return view('openSource');
+    public function index() {
+        return view('open-source');
+    }
 }
-}
+```
 
 ## Validation
 
 When using multiple rules for one field in a form request, avoid using |, always use array notation. Using an array
 notation will make it easier to apply custom rule classes to a field.
 
-public function rules()
-{
-return [
-'email' => ['required', 'email'],
-];
-}
+Good:
 
+```php
 public function rules()
 {
-return [
-'email' => 'required|email',
-];
+    return [
+        'email' => ['required', 'email'],
+    ];
 }
+```
+
+Bad:
+
+```php
+public function rules()
+{
+    return [
+        'email' => 'required|email',
+    ];
+}
+```
 
 All custom validation rules must use snake_case:
 
+```php
 Validator::extend('organisation_type', function ($attribute, $value) {
-return OrganisationType::isValid($value);
+    return OrganisationType::isValid($value);
 });
+```
 
 ## Blade Templates
 
 Indent using four spaces.
 
+```html
 <a href="/open-source">
     Open Source
 </a>
+```
 
 Don't add spaces after control structures.
 
+Good:
+
+```php
 @if($condition)
-Something
+    Something
 @endif
+```
+
+Bad:
+
+```php
+@if ( $condition )
+    Something
+@endif
+```
 
 ## Authorization
 
-Policies must use camelCase.
+Policies must use camelCase,
+But try to use a model policy when possible.
+This eliminates the need for a type suffix
 
+We could vouch for using the REST verbs in the policy methods, but because the convention used by Laravel is as follows,
+some packages assume these methods.
+What we CAN (and not necessarily should) do though; is map the methods to the REST verbs as well.
+
+Best:
+
+```php
+class ExamplePolicy
+{
+    use HandlesAuthorization;
+
+    public function viewAny(User $user){}
+
+    public function view(User $user, Example $example){}
+    
+    //possible
+    public function show(User $user, Example $example){
+        $this->view();
+    }
+   
+    public function create(User $user){}
+        
+    //possible, and so on...
+    public function store(User $user){
+        $this->create();
+    }
+
+    public function update(User $user, Example $example){}
+    
+    public function delete(User $user, Example $example){}
+
+    public function restore(User $user, Example $example){}
+
+    public function forceDelete(User $user, Example $example){}
+}
+```
+
+When not using the model policies, you can define gates in camelCase style:
+
+```php
 Gate::define('editPost', function ($user, $post) {
-return $user->id == $post->user_id;
+    return $user->id == $post->user_id;
 });
+```
 
+```php
 @can('editPost', $post)
-<a href="{{ route('posts.edit', $post) }}">
-Edit
-</a>
+    <a href="{{ route('posts.edit', $post) }}">
+        Edit
+    </a>
 @endcan
-
-Try to name abilities using default CRUD words. One exception: replace show with view. A server shows a resource, a user
-views it.
+```
 
 ## Translations
 
-Translations must be rendered with the __ function. We prefer using this over @lang in Blade views because __ can be
+Translations must be rendered with the __ function.
+In the newer projects, we usually make a strong typed version of this function that returns only a string.
+You can recognize this by the fact that the function name has 3 underscores instead of 2.
+
+```php
+___()
+```
+
+We prefer using this over @lang in Blade views because __ can be
 used in both Blade views and regular PHP code. Here's an example:
 
+```html
 <h2>{{ __('newsletter.form.title') }}</h2>
 
 {!! __('newsletter.form.description') !!}
+```
 
 ## Naming Classes
 
 Naming things is often seen as one of the harder things in programming. That's why we've established some high level
 guidelines for naming classes.
 
-## Controllers
+### Controllers
 
-Generally controllers are named by the plural form of their corresponding resource and a Controller suffix. This is to
+Generally controllers are named by the singular form of their corresponding resource and a Controller suffix. This is to
 avoid naming collisions with models that are often equally named.
 
-e.g. UsersController or EventDaysController
+e.g. `UserController` or `EventDayController`
 
 When writing non-resourceful controllers you might come across invokable controllers that perform a single action. These
-can be named by the action they perform again suffixed by Controller.
+can be named by the action they perform again suffixed by `Controller`.
 
-e.g. PerformCleanupController
+e.g. `PerformCleanupController`
 
-## Resources (and transformers)
+### Resources
 
-Both Eloquent resources and Fractal transformers are plural resources suffixed with Resource or Transformer accordingly.
+Eloquent resources are plural resources suffixed with `Resource`.
 This is to avoid naming collisions with models.
 
-## Jobs
+### Jobs
 
 A job's name should describe its action.
+We suffix the job with `Job` to be descriptive and avoid naming collisions.
 
-E.g. CreateUser or PerformDatabaseCleanup
+E.g. `CreateUserJob` or `PerformDatabaseCleanupJob`
 
-## Events
+### Events
 
-Events will often be fired before or after the actual event. This should be very clear by the tense used in their name.
+Events will often be fired before or after the actual event.
+This should be very clear by the tense used in their name.
+The events should also be suffixed with `Event` to avoid naming collisions and be more descriptive.
 
-E.g. ApprovingLoan before the action is completed and LoanApproved after the action is completed.
+E.g. `ApprovingLoanEvent` before the action is completed and `LoanApprovedEvent` after the action is completed.
 
-## Listeners
+### Listeners
 
-Listeners will perform an action based on an incoming event. Their name should reflect that action with a Listener
-suffix. This might seem strange at first but will avoid naming collisions with jobs.
+Listeners will perform an action based on an incoming event. Their name should reflect that action with a `Listener`
+suffix. This will avoid naming collisions with jobs, and be more descriptive.
 
-E.g. SendInvitationMailListener
+E.g. `SendInvitationMailListener`
 
-## Commands
+### Commands
 
-To avoid naming collisions we'll suffix commands with Command, so they are easiliy distinguisable from jobs.
+To avoid naming collisions we'll suffix commands with `Command`, so they are easiliy distinguisable from jobs.
 
-e.g. PublishScheduledPostsCommand
+e.g. `PublishScheduledPostsCommand`
 
-## Mailables
+### Mailables
 
-Again to avoid naming collisions we'll suffix mailables with Mail, as they're often used to convey an event, action or
+Again to avoid naming collisions we'll suffix mailables with `Mail`, as they're often used to convey an event, action or
 question.
 
-e.g. AccountActivatedMail or NewEventMail
+e.g. `AccountActivatedMail` or `NewEventMail`
 
-## Enums
+### Enums
 
 Enums don't need to be prefixed as in most cases, it is clear by reading the name that it is an enum.
 
-e.g. OrderStatus or BookingType or Suit
+e.g. `OrderStatus` or `BookingType` or `Suit`
