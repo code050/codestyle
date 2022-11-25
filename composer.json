@@ -10,12 +10,17 @@
   },
   "authors": [
     {
-      "name": "Melchior Aorus",
-      "email": "melchiorkokernoot@gmail.com"
+      "name": "Melchior Kokernoot",
+      "email": "melchior@code050.nl"
     }
   ],
   "minimum-stability": "stable",
   "require": {
     "friendsofphp/php-cs-fixer": "^3.12"
+  },
+  "scripts": {
+    "fix": [
+      "vendor/bin/php-cs-fixer fix ."
+    ]
   }
 }
