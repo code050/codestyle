@@ -17,5 +17,5 @@
   "minimum-stability": "stable",
   "require": {
     "friendsofphp/php-cs-fixer": "^3.12"
-  },
+  }
 }

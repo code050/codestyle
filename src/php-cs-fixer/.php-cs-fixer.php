@@ -18,6 +18,6 @@ return $config->setRules([
         'syntax' => 'short'
     ],
 
-
     'strict_param' => true,
+    'no_whitespace_before_comma_in_array'
 ]);
