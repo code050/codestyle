@@ -71,6 +71,32 @@ class Foo
     public $bar;
 }
 ```
+
+
+## Runtime variable type definitions
+
+Because we tend to use PHPStan, we already get a lot of type safety in our code.
+Unfortunately, PHPStan can't always infer the type of a variable, so sometimes we have to help it out.
+We can do this by using the `assert()` function, or we can use the Assert facade from Webmozart.
+This package is included in laravel by default, so you can use it in your code.
+Always prefer this over docblocks annotations.
+
+Good:
+
+```php
+$foo = $this->getFoo();
+Assert::isInstanceOf($foo, Foo::class);
+$foo->doSomething();
+```
+
+Bad:
+
+```php
+/** @var Foo $foo */
+$foo = $this->getFoo();
+$foo->doSomething();
+```
+
 ## Arrays
 Use the shorthand array syntax instead of the long array syntax.
 
@@ -85,6 +111,27 @@ Bad:
 ```php
 $foo = array('bar');
 ```
+
+
+When creating a multiline array we use trailing comma's so that adding a new line to the array doesn't
+require changing the previous line.
+
+Good:
+
+```php
+$foo = [
+    'bar',
+    ];
+```
+
+Bad:
+
+```php
+$foo = [
+    'bar'
+    ];
+```
+
 ## Enums
 
 Values in enums should use PascalCase.
@@ -273,7 +320,8 @@ function someFunction(): Collection {
 ## Constructor property promotion
 
 Use constructor property promotion where possible. To make it readable, put each one on a line of its
-own. Don't use a comma after the last one.
+own. Do use a comma after the last one. We use trailing comma's so that adding a new property doesn't
+require changing the previous line.
 
 Good:
 
