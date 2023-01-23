@@ -26,14 +26,12 @@
     "package-scripts": {
       "fix": "vendor/bin/phpcbf",
       "check": "vendor/bin/phpcs",
-      "stan": "vendor/bin/phpstan --memory-limit=-1",
+      "stan": "vendor/bin/phpstan . --memory-limit=-1",
       "checkall": [
         "@check",
         "@stan"
-      ]
-      "init": "Code050\\Codestyle\\Scripts\\CodeStyle::initialize",
-      "say": "Code050\\Codestyle\\Scripts\\CodeStyle::say",
-      "foo": "Code050\\Codestyle\\Commands\\FooCommand"
+      ],
+      "init": "Code050\\Codestyle\\Scripts\\InitializeCodestyle::handle",
     }
   },
   "config": {

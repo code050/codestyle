@@ -2,9 +2,20 @@
 
 namespace Code050\Codestyle;
 
-class ComposerCommand
+use Composer\Script\Event;
+
+abstract class ComposerCommand
 {
     protected static array $arguments = [];
+
+    public static function handle(Event $event): void
+    {
+    }
+
+    protected static function getArgument(string $key)
+    {
+        return self::$arguments[$key] ?? null;
+    }
 
     protected static function parseArguments(): void
     {
@@ -28,6 +39,5 @@ class ComposerCommand
                 }
             }
         }
-        var_dump(self::$arguments);
     }
 }

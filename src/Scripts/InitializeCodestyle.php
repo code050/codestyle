@@ -6,9 +6,9 @@ use Code050\Codestyle\ComposerCommand;
 use Composer\Installer\PackageEvent;
 use Composer\Script\Event;
 
-class CodeStyle extends ComposerCommand
+class InitializeCodestyle extends ComposerCommand
 {
-    public static function initialize(Event $event): void
+    public static function handle(Event $event): void
     {
         $vendorDir = $event->getComposer()->getConfig()->get('vendor-dir');
         $rootDir = dirname($vendorDir);
@@ -18,16 +18,14 @@ class CodeStyle extends ComposerCommand
         self::writeStubToRootDir($rootDir, 'phpstan.neon', 'phpstan/phpstan.dist.neon');
     }
 
-
     private static function writeStubToRootDir(string $rootDir, string $filename, string $stubFilename): void
     {
-        if (file_exists($rootDir . '/' . $filename)) {
-            echo 'Found ' . $filename . ' config file. Run with argument --overwrite to overwrite it.' . PHP_EOL;
+        if (file_exists($rootDir . '/' . $filename) && self::getArgument('overwrite') != 'true') {
+            echo 'Found ' . $filename . ' config file. Run with argument `-- --overwrite to overwrite it.`' . PHP_EOL;
+            return;
         }
 
-        //copy src/php-code-style/phpcs.dist.xml to the root dir as phpcs.xml
         echo 'Copying ' . $stubFilename . ' config file to ' . $rootDir . ' as ' . $filename . PHP_EOL;
         copy(__DIR__ . '/../Services/' . $stubFilename, $rootDir . '/' . $filename);
     }
-
 }
