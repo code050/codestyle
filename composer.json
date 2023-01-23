@@ -31,7 +31,7 @@
         "@check",
         "@stan"
       ],
-      "init": "Code050\\Codestyle\\Scripts\\InitializeCodestyle::handle",
+      "init": "Code050\\Codestyle\\Scripts\\InitializeCodestyle::handle"
     }
   },
   "config": {
