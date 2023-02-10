@@ -16,28 +16,30 @@
   ],
   "minimum-stability": "stable",
   "require": {
-    "friendsofphp/php-cs-fixer": "^3.12",
-    "kuria/composer-pkg-scripts": "^1.1",
     "squizlabs/php_codesniffer": "^3.7",
-    "slevomat/coding-standard": ">8.7.1",
-    "phpstan/phpstan": "^1.9"
+    "slevomat/coding-standard": "~8.0",
+    "phpstan/phpstan": "^1.9",
+    "melchiorkokernoot/composer-pkg-scripts": "dev-master"
+  },
+  "require-dev": {
+    "composer/composer": "*"
   },
   "extra": {
     "package-scripts": {
       "fix": "vendor/bin/phpcbf",
       "check": "vendor/bin/phpcs",
-      "stan": "vendor/bin/phpstan . --memory-limit=-1",
+      "stan": "vendor/bin/phpstan analyze . --memory-limit=-1",
+      "init": "Code050\\Codestyle\\Commands\\InitializeCodestyle::handle",
       "checkall": [
         "@check",
         "@stan"
-      ],
-      "init": "Code050\\Codestyle\\Scripts\\InitializeCodestyle::handle"
+      ]
     }
   },
   "config": {
     "allow-plugins": {
-      "kuria/composer-pkg-scripts": true,
-      "dealerdirect/phpcodesniffer-composer-installer": true
+      "dealerdirect/phpcodesniffer-composer-installer": true,
+      "melchiorkokernoot/composer-pkg-scripts": true
     }
   }
 }
