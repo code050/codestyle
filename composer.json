@@ -3,7 +3,7 @@
   "description": "The official Code050 codestyle package, containing a guideline, a phpcs configuration and a phpstan configuration.",
   "type": "library",
   "license": "MIT",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "autoload": {
     "psr-4": {
       "Code050\\Codestyle\\": "src/"
@@ -20,7 +20,7 @@
     "squizlabs/php_codesniffer": "^3.7",
     "slevomat/coding-standard": "~8.0",
     "phpstan/phpstan": "^1.9",
-    "melchiorkokernoot/composer-pkg-scripts": "^1.0"
+    "melchiorkokernoot/composer-pkg-scripts": "^1.0.0"
   },
   "require-dev": {
     "composer/composer": "*"
