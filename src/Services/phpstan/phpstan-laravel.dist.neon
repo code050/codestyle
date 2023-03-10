@@ -1,5 +1,14 @@
 includes:
     - /vendor/nunomaduro/larastan/extension.neon
+
+paths:
+    - app
+    - database
+    - routes
+    - tests
+    - config
+    - bootstrap
+
 parameters:
     excludePaths:
         - bootstrap/cache

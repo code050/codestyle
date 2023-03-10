@@ -1,3 +1,5 @@
+paths:
+    - .
 parameters:
     excludePaths:
         - bootstrap/cache
