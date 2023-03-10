@@ -111,3 +111,46 @@ php artisan code050:codestyle:stan:baseline
 
 This will generate a `phpstan-baseline.neon` file in the root of your project. It will also register this baseline in
 your `phpstan.neon` file, so it will be used when running the PHPStan checks.
+
+## General notes
+
+If you encounter any issues with the package, please create an issue on
+the [GitHub repository](https://github.com/code050/codestyle/issues).
+
+## Workflow for legacy projects
+
+Unfortunately, we can't just run the init and fixer commands on legacy projects.
+This will probably break some things, but more often than not, after generation of a phpstan baseline, the project will
+still have PHPStan errors.
+
+These errors usually indicate serious problems in the code, that would probably throw exceptions when hit in production.
+So, we need to fix these errors manually.
+
+For PHP_CodeSniffer, we can use the `--loose` flag to generate a looser configuration. This will report a lot of common
+errors as warnings instead of errors, so you can fix them at your own pace.
+You can find a detailed explanation of the `--loose` flag in the [Initialization](#initializing-the-package) section.
+
+So firstly we need to run the init command with the `--loose` flag:
+
+```bash
+php artisan code050:codestyle:init -- --loose
+```
+
+After this, we can run the PHP_CodeSniffer fixer command:
+
+```bash
+php artisan code050:codestyle:fix
+```
+
+Then we run PHPStan to generate a baseline file:
+
+```bash
+php artisan code050:codestyle:stan:baseline
+```
+
+The errors that remain after this, are the ones that need to be fixed manually.
+For PHP_CodeSniffer, you can report these errors as warnings as described in
+the [Initialization](#initializing-the-package) section.
+For PHPStan, you should fix the error manually.
+
+
