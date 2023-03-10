@@ -1,6 +1,6 @@
-paths:
-    - .
 parameters:
+    paths:
+        - .
     excludePaths:
         - bootstrap/cache
         - node_modules/
