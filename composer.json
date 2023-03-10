@@ -3,7 +3,7 @@
   "description": "The official Code050 codestyle package, containing a guideline, a phpcs configuration and a phpstan configuration.",
   "type": "library",
   "license": "MIT",
-  "version": "1.0.5",
+  "version": "2.0",
   "autoload": {
     "psr-4": {
       "Code050\\Codestyle\\": "src/"
