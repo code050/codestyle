@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Code050\Codestyle\Commands;
 
 use Symfony\Component\Console\Command\Command;
@@ -10,16 +12,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class InitializeCodestyleCommand extends Command
 {
-    protected function configure(): void
-    {
-        $this->setDefinition(
-            [
-            new InputOption('arbitrary-flag', null, InputOption::VALUE_NONE, 'Example flag'),
-            new InputArgument('foo', InputArgument::OPTIONAL, 'Optional arg'),
-            ]
-        );
-    }
-
     public function execute(InputInterface $input, OutputInterface $output): int
     {
         if ($input->getOption('arbitrary-flag')) {
@@ -27,5 +19,15 @@ class InitializeCodestyleCommand extends Command
         }
 
         return 0;
+    }
+
+    protected function configure(): void
+    {
+        $this->setDefinition(
+            [
+                new InputOption('arbitrary-flag', null, InputOption::VALUE_NONE, 'Example flag'),
+                new InputArgument('foo', InputArgument::OPTIONAL, 'Optional arg'),
+            ],
+        );
     }
 }
