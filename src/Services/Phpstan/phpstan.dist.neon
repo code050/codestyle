@@ -1,6 +1,6 @@
-includes:
-    - /vendor/nunomaduro/larastan/extension.neon
 parameters:
+    paths:
+        - .
     excludePaths:
         - bootstrap/cache
         - node_modules/
@@ -11,3 +11,4 @@ parameters:
         - tests/
     level: max
     editorUrl: 'phpstorm://open?file=%%file%%&line=%%line%%'
+    reportUnmatchedIgnoredErrors: true

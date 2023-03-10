@@ -4,6 +4,10 @@
 
 The official Code050 codestyle package.
 
+## Guidelines
+
+A description of the guidelines can be found in the [Code050 Codestyle Guidelines](guideline.md) document.
+
 ## Installation
 
 You can install the package via composer:
@@ -33,6 +37,17 @@ php artisan code050:codestyle:init
 This will copy the stub configuration files to your project, but will not overwrite any existing files.
 If you want to overwrite existing files, you can use the `-- --overwrite` flag. Note the double `--` before
 the `--overwrite` flag.
+
+When initializing the package in an existing project, chances are that you will get loads of errors from the
+PHP_CodeSniffer
+and PHPStan checks. This is because the stub configuration files are very strict and will enforce a lot of rules.
+For PHPStan you can generate a baseline file to ignore all the errors.
+
+But because PHP_CodeSniffer does not support a baseline file, you can use `--loose` flag to initialize the package with
+a
+looser configuration. This will report a lot of common errors as warnings instead of errors, so you can fix them at your
+own pace. In the background the `--loose` flag will copy the `phpcs.loose.xml` file instead of the `phpcs.xml` file.
+You can even extend this file with more custom rule mitigations, to get to the 0 error state.
 
 ### Running the checks
 
@@ -86,6 +101,13 @@ You can change the PHPStan configuration by editing the `phpstan.neon` file in t
 more information about the rules that can be configured in
 the [PHPStan documentation](https://phpstan.org/user-guide/getting-started).
 
+#### Generating baseline
 
+When you want to generate a baseline file, you can run the following command:
 
+```bash
+php artisan code050:codestyle:stan:baseline
+```
 
+This will generate a `phpstan-baseline.neon` file in the root of your project. It will also register this baseline in
+your `phpstan.neon` file, so it will be used when running the PHPStan checks.

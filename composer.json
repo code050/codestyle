@@ -3,7 +3,7 @@
   "description": "The official Code050 codestyle package, containing a guideline, a phpcs configuration and a phpstan configuration.",
   "type": "library",
   "license": "MIT",
-  "version": "1.0.5",
+  "version": "2.0",
   "autoload": {
     "psr-4": {
       "Code050\\Codestyle\\": "src/"
@@ -20,17 +20,21 @@
     "squizlabs/php_codesniffer": "^3.7",
     "slevomat/coding-standard": "~8.0",
     "phpstan/phpstan": "^1.9",
-    "melchiorkokernoot/composer-pkg-scripts": "^1.0.0"
+    "melchiorkokernoot/composer-pkg-scripts": "^1.0.0",
+    "php": ">7.4"
   },
   "require-dev": {
     "composer/composer": "*"
   },
   "extra": {
     "package-scripts": {
+      "init": "Code050\\Codestyle\\Commands\\InitializeCodestyle::handle",
       "fix": "vendor/bin/phpcbf",
       "check": "vendor/bin/phpcs",
-      "stan": "vendor/bin/phpstan analyze . --memory-limit=-1",
-      "init": "Code050\\Codestyle\\Commands\\InitializeCodestyle::handle",
+
+      "stan": "Code050\\Codestyle\\Services\\Phpstan\\Commands\\Run::handle",
+      "stan:baseline": "Code050\\Codestyle\\Services\\Phpstan\\Commands\\GenerateBaseline::handle",
+
       "checkall": [
         "@check",
         "@stan"
