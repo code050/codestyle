@@ -20,8 +20,9 @@ class InitializeCodestyle extends ComposerCommand
     private const PHPCS_DIST_XML = 'phpcs.dist.xml';
     private const PHPCS_XML = 'phpcs.xml';
     private const PHPSTAN_NEON = 'phpstan.neon';
-    private const PHPSTAN_PHPSTAN_DIST_NEON_PATH = 'phpstan/phpstan.dist.neon';
-    private const PHP_CODE_SNIFFER_PATH = 'php-code-sniffer/';
+
+    private const PHPSTAN_DIR = 'Phpstan/phpstan.dist.neon';
+    private const PHPCS_DIR = 'Php-code-sniffer/';
 
     public string $description = 'Copies the default config files to the root directory of the project 
                                         --overwrite: Overwrites the existing config files';
@@ -33,8 +34,8 @@ class InitializeCodestyle extends ComposerCommand
         $rootDir = dirname(self::$vendorDir);
         $phpcsFileName = self::determinePhpCsFile();
 
-        self::writeStubToRootDir($rootDir, self::PHPCS_XML, self::PHP_CODE_SNIFFER_PATH . $phpcsFileName);
-        self::writeStubToRootDir($rootDir, self::PHPSTAN_NEON, self::PHPSTAN_PHPSTAN_DIST_NEON_PATH);
+        self::writeStubToRootDir($rootDir, self::PHPCS_XML, self::PHPCS_DIR . $phpcsFileName);
+        self::writeStubToRootDir($rootDir, self::PHPSTAN_NEON, self::PHPSTAN_DIR);
     }
 
     private static function writeStubToRootDir(string $rootDir, string $filename, string $stubFilename): void
