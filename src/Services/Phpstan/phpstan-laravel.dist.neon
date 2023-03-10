@@ -1,8 +1,5 @@
 includes:
     - /vendor/nunomaduro/larastan/extension.neon
-
-
-
 parameters:
     paths:
         - app
@@ -21,3 +18,5 @@ parameters:
         - tests/
     level: max
     editorUrl: 'phpstorm://open?file=%%file%%&line=%%line%%'
+    reportUnmatchedIgnoredErrors: true
+

@@ -1,37 +1,59 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Code050\Codestyle\Commands;
 
-use Code050\Codestyle\Commands\Arguments\HelpArgument;
 use Composer\Script\Event;
+
+use function copy;
+use function dirname;
+use function file_exists;
+
+use const PHP_EOL;
 
 class InitializeCodestyle extends ComposerCommand
 {
-    protected static array $arguments = [
-        HelpArgument::class
-    ];
+    private const LOOSE = 'loose';
+    private const OVERWRITE = 'overwrite';
+    private const PHPCS_LOOSE_DIST_XML = 'phpcs-loose.dist.xml';
+    private const PHPCS_DIST_XML = 'phpcs.dist.xml';
+    private const PHPCS_XML = 'phpcs.xml';
+    private const PHPSTAN_NEON = 'phpstan.neon';
+    private const PHPSTAN_PHPSTAN_DIST_NEON_PATH = 'phpstan/phpstan.dist.neon';
+    private const PHP_CODE_SNIFFER_PATH = 'php-code-sniffer/';
 
     public string $description = 'Copies the default config files to the root directory of the project 
                                         --overwrite: Overwrites the existing config files';
 
     public static function handle(Event $event): void
     {
-        self::parseArguments($event->getArguments());
-        $vendorDir = $event->getComposer()->getConfig()->get('vendor-dir');
-        $rootDir = dirname($vendorDir);
+        parent::handle($event);
 
-        self::writeStubToRootDir($rootDir, 'phpcs.xml', 'php-code-sniffer/phpcs.dist.xml');
-        self::writeStubToRootDir($rootDir, 'phpstan.neon', 'phpstan/phpstan.dist.neon');
+        $rootDir = dirname(self::$vendorDir);
+        $phpcsFileName = self::determinePhpCsFile();
+
+        self::writeStubToRootDir($rootDir, self::PHPCS_XML, self::PHP_CODE_SNIFFER_PATH . $phpcsFileName);
+        self::writeStubToRootDir($rootDir, self::PHPSTAN_NEON, self::PHPSTAN_PHPSTAN_DIST_NEON_PATH);
     }
 
     private static function writeStubToRootDir(string $rootDir, string $filename, string $stubFilename): void
     {
-        if (file_exists($rootDir . '/' . $filename) && self::getArgument('overwrite') != 'true') {
+        if (file_exists($rootDir . '/' . $filename) && self::getArgument(self::OVERWRITE) !== true) {
             echo 'Found ' . $filename . ' config file. Run with argument `-- --overwrite to overwrite it.`' . PHP_EOL;
             return;
         }
 
         echo 'Copying ' . $stubFilename . ' config file to ' . $rootDir . ' as ' . $filename . PHP_EOL;
         copy(__DIR__ . '/../Services/' . $stubFilename, $rootDir . '/' . $filename);
+    }
+
+    private static function determinePhpCsFile(): string
+    {
+        if (self::getArgument(self::LOOSE) === true) {
+            return self::PHPCS_LOOSE_DIST_XML;
+        }
+
+        return self::PHPCS_DIST_XML;
     }
 }

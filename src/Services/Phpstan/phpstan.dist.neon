@@ -11,3 +11,4 @@ parameters:
         - tests/
     level: max
     editorUrl: 'phpstorm://open?file=%%file%%&line=%%line%%'
+    reportUnmatchedIgnoredErrors: true

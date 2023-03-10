@@ -1,64 +1,68 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Code050\Codestyle\Commands;
 
 use Composer\Script\Event;
 
+use function explode;
+use function str_replace;
+use function strpos;
+
 abstract class ComposerCommand
 {
-    private string $description;
+    protected const HANDLE_PREFIX = 'code050:codestyle:';
 
+    public static string $handle;
+
+    protected static string $vendorDir;
+
+    /** @var array<string, string|bool> */
     protected static array $arguments = [];
 
-    public function __construct()
+    protected string $description;
+
+    public static function handle(Event $event): void
     {
-        self::parseArguments();
+        self::parseArguments($event->getArguments());
+        self::$vendorDir = $event->getComposer()->getConfig()->get('vendor-dir');
     }
 
-    abstract public static function handle(Event $event): void;
+    public function getDescription(): string
+    {
+        return $this->description;
+    }
 
+    /**
+     * @return bool|string|null
+     */
     protected static function getArgument(string $key)
     {
         return self::$arguments[$key] ?? null;
     }
 
-    protected static function constructArgumentClasses(): void
+    /**
+     * @param array<string,string> $arguments
+     */
+    protected static function parseArguments(array $arguments): void
     {
-        foreach (self::$arguments as $key => $argument) {
-            if (class_exists($argument)) {
-                self::$arguments[$key] = new $argument(self::class);
-            }
-        }
-    }
-
-    protected static function parseArguments(array $arguments = []): void
-    {
-        self::constructArgumentClasses();
-
-        $arguments = $arguments ?? $_SERVER['argv'];
-        array_shift($arguments);
         foreach ($arguments as $argument) {
             //if -- is the only content of the argument, skip it
             if ($argument === '--') {
                 continue;
             }
 
-            if (strpos($argument, '--') === 0) {
-                $argument = str_replace('--', '', $argument);
-                //explode the argument on the = sign
-                $argument = explode('=', $argument);
-                //if the argument has a value, add it to the array
-                if (isset($argument[1])) {
-                    self::$arguments[$argument[0]] = $argument[1];
-                } else {
-                    self::$arguments[$argument[0]] = true;
-                }
+            if (strpos($argument, '--') !== 0) {
+                continue;
             }
-        }
-    }
 
-    public function getDescription(): string
-    {
-        return $this->description;
+            $argument = str_replace('--', '', $argument);
+            //explode the argument on the = sign
+            $argument = explode('=', $argument);
+
+            //if the argument has a value, add it to the array
+            self::$arguments[$argument[0]] = $argument[1] ?? true;
+        }
     }
 }
