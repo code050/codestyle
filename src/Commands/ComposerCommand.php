@@ -6,9 +6,11 @@ namespace Code050\Codestyle\Commands;
 
 use Composer\Script\Event;
 
+use function assert;
 use function explode;
+use function is_string;
 use function str_replace;
-use function strpos;
+use function str_starts_with;
 
 abstract class ComposerCommand
 {
@@ -26,7 +28,9 @@ abstract class ComposerCommand
     public static function handle(Event $event): void
     {
         self::parseArguments($event->getArguments());
-        self::$vendorDir = $event->getComposer()->getConfig()->get('vendor-dir');
+        $vendorDir = $event->getComposer()->getConfig()->get('vendor-dir');
+        assert(is_string($vendorDir));
+        self::$vendorDir = $vendorDir;
     }
 
     public function getDescription(): string
@@ -53,7 +57,7 @@ abstract class ComposerCommand
                 continue;
             }
 
-            if (strpos($argument, '--') !== 0) {
+            if (!str_starts_with($argument, '--')) {
                 continue;
             }
 

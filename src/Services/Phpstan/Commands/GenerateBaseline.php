@@ -9,6 +9,8 @@ use Composer\Script\Event;
 
 use function shell_exec;
 
+use const PHP_EOL;
+
 class GenerateBaseline extends ComposerCommand
 {
     public const GENERATE_BASELINE = '--generate-baseline';
