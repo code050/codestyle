@@ -29,7 +29,7 @@
     "package-scripts": {
       "fix": "vendor/bin/phpcbf",
       "check": "vendor/bin/phpcs",
-      "stan": "vendor/bin/phpstan analyze . --memory-limit=-1",
+      "stan": "vendor/bin/phpstan --memory-limit=-1",
       "init": "Code050\\Codestyle\\Commands\\InitializeCodestyle::handle",
       "checkall": [
         "@check",
