@@ -21,7 +21,6 @@
     "slevomat/coding-standard": "~8.0",
     "phpstan/phpstan": "^1.9",
     "melchiorkokernoot/composer-pkg-scripts": "^1.0.0",
-    "nette/neon": "^3.4",
     "php": ">7.4"
   },
   "require-dev": {

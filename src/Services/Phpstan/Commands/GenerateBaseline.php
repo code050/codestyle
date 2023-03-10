@@ -6,9 +6,7 @@ namespace Code050\Codestyle\Services\Phpstan\Commands;
 
 use Code050\Codestyle\Commands\ComposerCommand;
 use Composer\Script\Event;
-use Nette\Neon\Neon;
 
-use function file_put_contents;
 use function shell_exec;
 
 class GenerateBaseline extends ComposerCommand
@@ -33,16 +31,9 @@ class GenerateBaseline extends ComposerCommand
         }
 
         echo shell_exec(self::$vendorDir . '/bin/phpstan ' . $arg);
-        self::addBaselineToPhpstanNeon();
-    }
-
-    private static function addBaselineToPhpstanNeon(): void
-    {
-        $path = self::getArgument('path') ?? 'phpstan.neon';
-        $fullPath = self::$vendorDir . '/../' . $path;
-        $value = Neon::decodeFile($fullPath);
-        $value['includes'][] = 'phpstan-baseline.neon';
-        $encodedContent = Neon::encode($value, true);
-        file_put_contents($fullPath, $encodedContent);
+        echo 'Baseline generated' . PHP_EOL;
+        echo 'Add the following line to your phpstan.neon file:' . PHP_EOL;
+        echo 'includes:' . PHP_EOL;
+        echo '    - phpstan-baseline.neon' . PHP_EOL;
     }
 }
