@@ -6,7 +6,7 @@
     <arg name="cache" value=".phpcs.cache"/>
     <arg name="extensions" value="php"/>
     <file>.</file>
-    <rule ref="vendor/code050/codestyle/src/Services/php-code-sniffer/phpcs.xml"/>
+    <rule ref="vendor/code050/codestyle/src/Services/Php-code-sniffer/phpcs.xml"/>
 
     <!--Adjust project specific preferences below-->
     <rule ref="Generic.CodeAnalysis.EmptyStatement.DetectedElse">
