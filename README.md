@@ -31,7 +31,7 @@ The package contains stub configurations for these tools which can be used in yo
 To initialize the package, you can run the following command:
 
 ```bash
-php artisan code050:codestyle:init
+composer code050:codestyle:init
 ```
 
 This will copy the stub configuration files to your project, but will not overwrite any existing files.
@@ -57,7 +57,7 @@ the PHP_CodeSniffer checks by running the following command:
 #### PHP_CodeSniffer
 
 ```bash
-php artisan code050:codestyle:check
+composer code050:codestyle:check
 ```
 
 This command will check your code against the Code050 codestyle rules and provide feedback on any issues found.
@@ -65,7 +65,7 @@ This command will check your code against the Code050 codestyle rules and provid
 To automatically fix any issues found by PHP_CodeSniffer, you can run the following command:
 
 ```bash
-php artisan code050:codestyle:fix
+composer code050:codestyle:fix
 ```
 
 #### PHPstan
@@ -73,7 +73,7 @@ php artisan code050:codestyle:fix
 You can run the PHPStan checks by running the following command:
 
 ```bash
-php artisan code050:codestyle:stan
+composer code050:codestyle:stan
 ```
 
 This command will check your code against the Code050 PHPStan rules and provide feedback on any issues found.
@@ -89,10 +89,19 @@ the [PHP_CodeSniffer documentation](https://github.com/squizlabs/PHP_CodeSniffer
 Basically, when you want to ignore certain rules, you can add the following to the `phpcs.xml` file:
 
 ```xml
-
 <rule ref="Code050">
     <exclude name="Generic.Files.LineLength"/>
 </rule> 
+```
+
+#### Example: configuring cognitive complexity
+```xml
+<rule ref="SlevomatCodingStandard.Complexity.Cognitive">
+    <properties>
+        <property name="warningThreshold" value="8"/>
+        <property name="errorThreshold" value="8"/>
+    </properties>
+</rule>
 ```
 
 ### PHPStan
@@ -106,7 +115,7 @@ the [PHPStan documentation](https://phpstan.org/user-guide/getting-started).
 When you want to generate a baseline file, you can run the following command:
 
 ```bash
-php artisan code050:codestyle:stan:baseline
+composer code050:codestyle:stan:baseline
 ```
 
 This will generate a `phpstan-baseline.neon` file in the root of your project. It will also register this baseline in
@@ -133,24 +142,22 @@ You can find a detailed explanation of the `--loose` flag in the [Initialization
 So firstly we need to run the init command with the `--loose` flag:
 
 ```bash
-php artisan code050:codestyle:init -- --loose
+composer code050:codestyle:init -- --loose
 ```
 
 After this, we can run the PHP_CodeSniffer fixer command:
 
 ```bash
-php artisan code050:codestyle:fix
+composer code050:codestyle:fix
 ```
 
 Then we run PHPStan to generate a baseline file:
 
 ```bash
-php artisan code050:codestyle:stan:baseline
+composer code050:codestyle:stan:baseline
 ```
 
 The errors that remain after this, are the ones that need to be fixed manually.
 For PHP_CodeSniffer, you can report these errors as warnings as described in
 the [Initialization](#initializing-the-package) section.
 For PHPStan, you should fix the error manually.
-
-
