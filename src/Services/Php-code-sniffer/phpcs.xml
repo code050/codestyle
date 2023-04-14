@@ -288,8 +288,8 @@
     </rule>
     <rule ref="SlevomatCodingStandard.Classes.ParentCallSpacing">
         <properties>
-            <property name="linesCountAfterParentCall" value="0"/>
-            <property name="linesCountAfterParentCall" value="1"/>
+            <property name="linesCountBefore" value="0"/>
+            <property name="linesCountAfter" value="1"/>
         </properties>
     </rule>
     <rule ref="SlevomatCodingStandard.Classes.ClassLength">
