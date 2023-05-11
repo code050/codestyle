@@ -6,6 +6,16 @@
     <arg name="cache" value=".phpcs.cache"/>
     <arg name="extensions" value="php"/>
     <file>.</file>
+
+    <!--Common exclude patterns-->
+    <exclude-pattern>./.git/*</exclude-pattern>
+    <exclude-pattern>./node_modules/*</exclude-pattern>
+    <exclude-pattern>./vendor/*</exclude-pattern>
+    <exclude-pattern>./storage/*</exclude-pattern>
+    <exclude-pattern>./public/js/*</exclude-pattern>
+    <exclude-pattern>./public/css/*</exclude-pattern>
+
+
     <rule ref="vendor/code050/codestyle/src/Services/Php-code-sniffer/phpcs.xml"/>
 
     <!--Adjust project specific preferences below-->

@@ -294,13 +294,13 @@
     </rule>
     <rule ref="SlevomatCodingStandard.Classes.ClassLength">
         <properties>
-            <property name="maxLinesCount" value="250"/>
+            <property name="maxLinesLength" value="250"/>
         </properties>
     </rule>
     <rule ref="SlevomatCodingStandard.Classes.BackedEnumTypeSpacing">
         <properties>
-            <property name="spacingBeforeColon" value="0"/>
-            <property name="spacingAfterColon" value="1"/>
+            <property name="spacesCountBeforeColon" value="0"/>
+            <property name="spacesCountBeforeType" value="1"/>
         </properties>
     </rule>
     <rule ref="SlevomatCodingStandard.Classes.TraitUseSpacing">

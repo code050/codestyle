@@ -3,7 +3,7 @@
   "description": "The official Code050 codestyle package, containing a guideline, a phpcs configuration and a phpstan configuration.",
   "type": "library",
   "license": "MIT",
-  "version": "2.0.4",
+  "version": "2.0.5",
   "autoload": {
     "psr-4": {
       "Code050\\Codestyle\\": "src/"
@@ -29,8 +29,8 @@
   "extra": {
     "package-scripts": {
       "init": "Code050\\Codestyle\\Commands\\InitializeCodestyle::handle",
-      "fix": "vendor/bin/phpcbf",
-      "check": "vendor/bin/phpcs",
+      "fix": "vendor\\bin\\phpcbf",
+      "check": "vendor\\bin\\phpcs",
 
       "stan": "Code050\\Codestyle\\Services\\Phpstan\\Commands\\Run::handle",
       "stan:baseline": "Code050\\Codestyle\\Services\\Phpstan\\Commands\\GenerateBaseline::handle",
