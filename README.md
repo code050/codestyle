@@ -104,6 +104,16 @@ Basically, when you want to ignore certain rules, you can add the following to t
 </rule>
 ```
 
+When you want to ignore a rule only in a certain path, you can add the following to the `phpcs.xml` file:
+
+```xml
+<rule ref="Code050">
+    <rule ref="SlevomatCodingStandard.Functions.StaticClosure.ClosureNotStatic">
+        <exclude-pattern>*/tests/*</exclude-pattern>
+    </rule>
+</rule>
+```
+
 ### PHPStan
 
 You can change the PHPStan configuration by editing the `phpstan.neon` file in the root of your project. You can find

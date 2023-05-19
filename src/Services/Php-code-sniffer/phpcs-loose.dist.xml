@@ -66,4 +66,10 @@
     <rule ref="SlevomatCodingStandard.ControlStructures.DisallowEmpty.DisallowedEmpty">
         <type>warning</type>
     </rule>
+    <rule ref="SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh">
+        <type>warning</type>
+    </rule>
+    <rule ref="SlevomatCodingStandard.Functions.StaticClosure.ClosureNotStatic">
+        <exclude-pattern>*/tests/*</exclude-pattern>
+    </rule>
 </rule>

@@ -19,4 +19,8 @@
     <rule ref="vendor/code050/codestyle/src/Services/Php-code-sniffer/phpcs.xml"/>
 
     <!--Adjust project specific preferences below-->
+
+    <rule ref="SlevomatCodingStandard.Functions.StaticClosure.ClosureNotStatic">
+        <exclude-pattern>*/tests/*</exclude-pattern>
+    </rule>
 </rule>
