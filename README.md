@@ -43,7 +43,7 @@ PHP_CodeSniffer
 and PHPStan checks. This is because the stub configuration files are very strict and will enforce a lot of rules.
 For PHPStan you can generate a baseline file to ignore all the errors.
 
-But because PHP_CodeSniffer does not support a baseline file, you can use `--loose` flag to initialize the package with
+If you do not want to use the Php-cs baseline for your project, you can use `--loose` flag to initialize the package with
 a
 looser configuration. This will report a lot of common errors as warnings instead of errors, so you can fix them at your
 own pace. In the background the `--loose` flag will copy the `phpcs.loose.xml` file instead of the `phpcs.xml` file.
